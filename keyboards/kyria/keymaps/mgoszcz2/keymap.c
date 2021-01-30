@@ -15,6 +15,10 @@
  */
 #include QMK_KEYBOARD_H
 
+// Needed since LT() does not support quantum keycodes.
+#define KC_OSM_LSFT KC_FN31
+#define LT_RAISE_OSS LT(_RAISE, KC_OSM_LSFT)
+
 enum layers {
     _QWERTY = 0,
     _LOWER,
@@ -22,26 +26,28 @@ enum layers {
     _ADJUST
 };
 
+// clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 /*
  * Base Layer: QWERTY
  *
  * ,-------------------------------------------.                              ,-------------------------------------------.
- * |RAIS/ESC|   Q  |   W  |   E  |   R  |   T  |                              |   Y  |   U  |   I  |   O  |   P  |  | \   |
+ * |        |   Q  |   W  |   E  |   R  |   T  |                              |   Y  |   U  |   I  |   O  |   P  |  | \   |
  * |--------+------+------+------+------+------|                              |------+------+------+------+------+--------|
- * |Ctrl/BS |   A  |   S  |  D   |   F  |   G  |                              |   H  |   J  |   K  |   L  | ;  : |  ' "   |
+ * |        |   A  |   S  |  D   |   F  |   G  |                              |   H  |   J  |   K  |   L  | ;  : |  ' "   |
+ * |        | Ctrl | Alt  | Shift| Cmd  |      |                              |      | Cmd  | Shift| Alt  | Ctrl |        |
  * |--------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+--------|
- * | LShift |   Z  |   X  |   C  |   V  |   B  |LShift|LShift|  |LShift|LShift|   N  |   M  | ,  < | . >  | /  ? |  - _   |
+ * |        |   Z  |   X  |   C  |   V  |   B  |      |      |  |      |      |   N  |   M  | ,  < | . >  | /  ? |  - _   |
  * `----------------------+------+------+------+------+------|  |------+------+------+------+------+----------------------'
- *                        | GUI  | Del  | Enter| Space| Esc  |  | Enter| Space| Tab  | Bksp | AltGr|
- *                        |      |      | Alt  | Lower| Raise|  | Lower| Raise|      |      |      |
+ *                        |      | Cmd  | Esc  | Space| Tab  |  | Enter|LShift| Bksp | Cmd  |      |
+ *                        |      |      |      | Lower| Raise|  | Lower|Raise |      |      |      |
  *                        `----------------------------------'  `----------------------------------'
  */
     [_QWERTY] = LAYOUT(
-      LT(_RAISE, KC_ESC),       KC_Q,   KC_W,   KC_E,   KC_R,   KC_T,                                         KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_PIPE,
-      MT(MOD_LCTL, KC_BSPC),   KC_A,   KC_S,   KC_D,   KC_F,   KC_G,                                         KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,
-      KC_LSFT,                 KC_Z,   KC_X,   KC_C,   KC_V,   KC_B,   KC_LSFT,   KC_LSFT, KC_LSFT, KC_LSFT, KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_MINS,
-              KC_LGUI, KC_DEL, MT(MOD_LALT, KC_ENT), LT(_LOWER, KC_SPC), LT(_RAISE, KC_ESC), LT(_LOWER, KC_ENT), LT(_RAISE, KC_SPC), KC_TAB,  KC_BSPC, KC_RALT
+      XXXXXXX,   KC_Q,          KC_W,          KC_E,          KC_R,          KC_T,                                         KC_Y,  KC_U,          KC_I,          KC_O,          KC_P,             KC_PIPE,
+      XXXXXXX,   LCTL_T(KC_A),  LALT_T(KC_S),  LSFT_T(KC_D),  LCMD_T(KC_F),  KC_G,                                         KC_H,  RCMD_T(KC_J),  RSFT_T(KC_K),  RALT_T(KC_L),  RCTL_T(KC_SCLN),  KC_QUOT,
+      XXXXXXX,   KC_Z,          KC_X,          KC_C,          KC_V,          KC_B,  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_N,     KC_M,          KC_COMM,       KC_DOT,        KC_SLSH,          KC_MINS,
+              XXXXXXX, KC_LCMD, KC_ESC, LT(_LOWER, KC_SPC), LT(_RAISE, KC_TAB), LT(_LOWER, KC_ENT), LT_RAISE_OSS, KC_BSPC,  KC_RCMD, XXXXXXX
     ),
 /*
  * Lower Layer: Symbols
@@ -124,9 +130,26 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 //                                  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
 //     ),
 };
+// clang-format on
 
 layer_state_t layer_state_set_user(layer_state_t state) {
     return update_tri_layer_state(state, _LOWER, _RAISE, _ADJUST);
+}
+
+bool process_record_user(uint16_t keycode, keyrecord_t* record) {
+    switch (keycode) {
+        case LT_RAISE_OSS:
+            if (record->event.pressed && record->tap.count > 0) {
+                if (get_oneshot_mods() & MOD_LSFT) {
+                    del_oneshot_mods(MOD_LSFT);
+                } else {
+                    add_oneshot_mods(MOD_LSFT);
+                }
+                return false;
+            }
+            break;
+    }
+    return true;
 }
 
 #ifdef OLED_DRIVER_ENABLE
@@ -193,27 +216,6 @@ void oled_task_user(void) {
         render_status(); // Renders the current keyboard state (layer, lock, caps, scroll, etc)
     } else {
         render_kyria_logo();
-    }
-}
-#endif
-
-#ifdef ENCODER_ENABLE
-void encoder_update_user(uint8_t index, bool clockwise) {
-    if (index == 0) {
-        // Volume control
-        if (clockwise) {
-            tap_code(KC_VOLU);
-        } else {
-            tap_code(KC_VOLD);
-        }
-    }
-    else if (index == 1) {
-        // Page up/Page down
-        if (clockwise) {
-            tap_code(KC_PGDN);
-        } else {
-            tap_code(KC_PGUP);
-        }
     }
 }
 #endif
