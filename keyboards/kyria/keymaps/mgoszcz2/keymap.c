@@ -32,6 +32,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 /*
  * Base Layer: QWERTY
  *
+ * Note we use LALT on the right half.
+ *
  * ,-------------------------------------------.                              ,-------------------------------------------.
  * |        |   Q  |   W  |   F  |   P  |   G  |                              |   J  |   L  |   U  |   Y  | ;  : |  | \   |
  * |--------+------+------+------+------+------|                              |------+------+------+------+------+--------|
@@ -40,15 +42,15 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |--------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+--------|
  * |        |   Z  |   X  |   C  |   V  |   B  |      |      |  |      |      |   K  |   M  | ,  < | . >  | /  ? |  - _   |
  * `----------------------+------+------+------+------+------|  |------+------+------+------+------+----------------------'
- *                        |      | Cmd  | Esc  | Space| Tab  |  | Enter|LShift| Bksp | Cmd  |      |
+ *                        |      |      | Esc  | Space| Tab  |  | Enter|LShift| Bksp |      |      |
  *                        |      |      |      | Lower| Raise|  | Lower|Raise |      |      |      |
  *                        `----------------------------------'  `----------------------------------'
  */
     [_QWERTY] = LAYOUT(
-      XXXXXXX,   CM_Q,          CM_W,          CM_F,          CM_P,          CM_G,                                         CM_J,  CM_L,          CM_U,          CM_Y,          CM_SCLN,       CM_PIPE,
-      XXXXXXX,   LCTL_T(CM_A),  LALT_T(CM_R),  LSFT_T(CM_S),  LCMD_T(CM_T),  CM_D,                                         CM_H,  RCMD_T(CM_N),  RSFT_T(CM_E),  RALT_T(CM_I),  RCTL_T(CM_O),  CM_QUOT,
-      XXXXXXX,   CM_Z,          CM_X,          CM_C,          CM_V,          CM_B,  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    CM_K,  CM_M,          CM_COMM,       CM_DOT,        CM_SLSH,       CM_MINS,
-              XXXXXXX, KC_LCMD, KC_ESC, LT(_LOWER, KC_SPC), LT(_RAISE, KC_TAB), LT(_LOWER, KC_ENT), LT_RAISE_OSS, KC_BSPC,  KC_RCMD, XXXXXXX
+      XXXXXXX,  CM_Q,          CM_W,          CM_F,          CM_P,          CM_G,                                         CM_J,  CM_L,          CM_U,          CM_Y,          CM_SCLN,       CM_PIPE,
+      XXXXXXX,  LCTL_T(CM_A),  LALT_T(CM_R),  LSFT_T(CM_S),  LCMD_T(CM_T),  CM_D,                                         CM_H,  RCMD_T(CM_N),  RSFT_T(CM_E),  LALT_T(CM_I),  RCTL_T(CM_O),  CM_QUOT,
+      XXXXXXX,  CM_Z,          CM_X,          CM_C,          CM_V,          CM_B,  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    CM_K,  CM_M,          CM_COMM,       CM_DOT,        CM_SLSH,       CM_MINS,
+                           XXXXXXX, XXXXXXX, KC_ESC, LT(_LOWER, KC_SPC), LT(_RAISE, KC_TAB),                   LT(_LOWER, KC_ENT), LT_RAISE_OSS, KC_BSPC, XXXXXXX, XXXXXXX
     ),
 /*
  * Lower Layer: Symbols
