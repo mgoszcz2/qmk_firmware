@@ -14,6 +14,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include QMK_KEYBOARD_H
+#include "keymap_colemak.h"
 
 // Needed since LT() does not support quantum keycodes.
 #define KC_OSM_LSFT KC_FN31
@@ -32,21 +33,21 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * Base Layer: QWERTY
  *
  * ,-------------------------------------------.                              ,-------------------------------------------.
- * |        |   Q  |   W  |   E  |   R  |   T  |                              |   Y  |   U  |   I  |   O  |   P  |  | \   |
+ * |        |   Q  |   W  |   F  |   P  |   G  |                              |   J  |   L  |   U  |   Y  | ;  : |  | \   |
  * |--------+------+------+------+------+------|                              |------+------+------+------+------+--------|
- * |        |   A  |   S  |  D   |   F  |   G  |                              |   H  |   J  |   K  |   L  | ;  : |  ' "   |
+ * |        |   A  |   R  |  S   |   T  |   D  |                              |   H  |   N  |   E  |   I  |   O  |  ' "   |
  * |        | Ctrl | Alt  | Shift| Cmd  |      |                              |      | Cmd  | Shift| Alt  | Ctrl |        |
  * |--------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+--------|
- * |        |   Z  |   X  |   C  |   V  |   B  |      |      |  |      |      |   N  |   M  | ,  < | . >  | /  ? |  - _   |
+ * |        |   Z  |   X  |   C  |   V  |   B  |      |      |  |      |      |   K  |   M  | ,  < | . >  | /  ? |  - _   |
  * `----------------------+------+------+------+------+------|  |------+------+------+------+------+----------------------'
  *                        |      | Cmd  | Esc  | Space| Tab  |  | Enter|LShift| Bksp | Cmd  |      |
  *                        |      |      |      | Lower| Raise|  | Lower|Raise |      |      |      |
  *                        `----------------------------------'  `----------------------------------'
  */
     [_QWERTY] = LAYOUT(
-      XXXXXXX,   KC_Q,          KC_W,          KC_E,          KC_R,          KC_T,                                         KC_Y,  KC_U,          KC_I,          KC_O,          KC_P,             KC_PIPE,
-      XXXXXXX,   LCTL_T(KC_A),  LALT_T(KC_S),  LSFT_T(KC_D),  LCMD_T(KC_F),  KC_G,                                         KC_H,  RCMD_T(KC_J),  RSFT_T(KC_K),  RALT_T(KC_L),  RCTL_T(KC_SCLN),  KC_QUOT,
-      XXXXXXX,   KC_Z,          KC_X,          KC_C,          KC_V,          KC_B,  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_N,     KC_M,          KC_COMM,       KC_DOT,        KC_SLSH,          KC_MINS,
+      XXXXXXX,   CM_Q,          CM_W,          CM_F,          CM_P,          CM_G,                                         CM_J,  CM_L,          CM_U,          CM_Y,          CM_SCLN,       CM_PIPE,
+      XXXXXXX,   LCTL_T(CM_A),  LALT_T(CM_R),  LSFT_T(CM_S),  LCMD_T(CM_T),  CM_D,                                         CM_H,  RCMD_T(CM_N),  RSFT_T(CM_E),  RALT_T(CM_I),  RCTL_T(CM_O),  CM_QUOT,
+      XXXXXXX,   CM_Z,          CM_X,          CM_C,          CM_V,          CM_B,  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    CM_K,  CM_M,          CM_COMM,       CM_DOT,        CM_SLSH,       CM_MINS,
               XXXXXXX, KC_LCMD, KC_ESC, LT(_LOWER, KC_SPC), LT(_RAISE, KC_TAB), LT(_LOWER, KC_ENT), LT_RAISE_OSS, KC_BSPC,  KC_RCMD, XXXXXXX
     ),
 /*
