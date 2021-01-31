@@ -15,10 +15,16 @@
  */
 #include QMK_KEYBOARD_H
 #include "keymap_colemak.h"
+#include "sendstring_colemak.h"
 
 // Needed since LT() does not support quantum keycodes.
 #define KC_OSM_LSFT KC_FN31
 #define LT_NUM_OSS LT(_NUM, KC_OSM_LSFT)
+
+enum custom_keycodes {
+    KC_SCREEN = SAFE_RANGE,
+    KC_LOCK,
+};
 
 enum layers {
     _COLEMAK,
@@ -41,16 +47,16 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |        |   A  |   R  |  S   |   T  |   D  |                              |   H  |   N  |   E  |   I  |   O  |  ' "   |
  * |        | Ctrl | Alt  | Shift| Cmd  |      |                              |      | Cmd  | Shift| Alt  | Ctrl |        |
  * |--------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+--------|
- * |        |   Z  |   X  |   C  |   V  |   B  |      |      |  |      |      |   K  |   M  | ,  < | . >  | /  ? |  - _   |
+ * |        |   Z  |   X  |   C  |   V  |   B  | Lock |      |  |      |Screen|   K  |   M  | ,  < | . >  | /  ? |  - _   |
  * `----------------------+------+------+------+------+------|  |------+------+------+------+------+----------------------'
  *                        |      |      | Esc  | Space| Bscp |  | Enter|LShift| Tab  |      |      |
  *                        |      |      |      | Lower| Raise|  | Lower| Num  |      |      |      |
  *                        `----------------------------------'  `----------------------------------'
  */
     [_COLEMAK] = LAYOUT(
-      XXXXXXX,  CM_Q,          CM_W,          CM_F,          CM_P,          CM_G,                                         CM_J,  CM_L,          CM_U,          CM_Y,          CM_SCLN,       CM_PIPE,
-      XXXXXXX,  LCTL_T(CM_A),  LALT_T(CM_R),  LSFT_T(CM_S),  LCMD_T(CM_T),  CM_D,                                         CM_H,  RCMD_T(CM_N),  RSFT_T(CM_E),  LALT_T(CM_I),  RCTL_T(CM_O),  CM_QUOT,
-      XXXXXXX,  CM_Z,          CM_X,          CM_C,          CM_V,          CM_B,  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    CM_K,  CM_M,          CM_COMM,       CM_DOT,        CM_SLSH,       CM_MINS,
+      XXXXXXX,  CM_Q,          CM_W,          CM_F,          CM_P,          CM_G,                                               CM_J,         CM_L,          CM_U,          CM_Y,          CM_SCLN,       CM_PIPE,
+      XXXXXXX,  LCTL_T(CM_A),  LALT_T(CM_R),  LSFT_T(CM_S),  LCMD_T(CM_T),  MEH_T(CM_D),                                        MEH_T(CM_H),  RCMD_T(CM_N),  RSFT_T(CM_E),  LALT_T(CM_I),  RCTL_T(CM_O),  CM_QUOT,
+      XXXXXXX,  CM_Z,          CM_X,          CM_C,          CM_V,          CM_B,         KC_LOCK, XXXXXXX, XXXXXXX, KC_SCREEN, CM_K,         CM_M,          CM_COMM,       CM_DOT,        CM_SLSH,       CM_MINS,
                           XXXXXXX, XXXXXXX, KC_ESC, LT(_LOWER, KC_SPC), LT(_RAISE, KC_BSPC),                  LT(_LOWER, KC_ENT), LT_NUM_OSS, KC_TAB, XXXXXXX, XXXXXXX
     ),
 /*
@@ -161,9 +167,10 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t* record) {
+    const bool pressed = record->event.pressed;
     switch (keycode) {
         case LT_NUM_OSS:
-            if (record->event.pressed && record->tap.count > 0) {
+            if (pressed && record->tap.count > 0) {
                 if (get_oneshot_mods() & MOD_LSFT) {
                     del_oneshot_mods(MOD_LSFT);
                 } else {
@@ -171,6 +178,12 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
                 }
                 return false;
             }
+            break;
+        case KC_SCREEN:
+            if (pressed) SEND_STRING(SS_LCMD(SS_LSFT("3")));
+            break;
+        case KC_LOCK:
+            if (pressed) SEND_STRING(SS_LCMD(SS_LCTL("q")));
             break;
     }
     return true;
