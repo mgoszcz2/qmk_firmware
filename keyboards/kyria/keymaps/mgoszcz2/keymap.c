@@ -45,9 +45,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |        |   Q  |   W  |   F  |   P  |   G  |                              |   J  |   L  |   U  |   Y  | ;  : |  | \   |
  * |--------+------+------+------+------+------|                              |------+------+------+------+------+--------|
  * |        |   A  |   R  |  S   |   T  |   D  |                              |   H  |   N  |   E  |   I  |   O  |  ' "   |
- * |        | Ctrl | Alt  | Shift| Cmd  |      |                              |      | Cmd  | Shift| Alt  | Ctrl |        |
+ * |        | Ctrl | Alt  | Shift| Cmd  | Meh  |                              | Meh  | Cmd  | Shift| Alt  | Ctrl |        |
  * |--------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+--------|
- * |        |   Z  |   X  |   C  |   V  |   B  | Lock |      |  |      |Screen|   K  |   M  | ,  < | . >  | /  ? |  - _   |
+ * |        |   Z  |   X  |   C  |   V  |   B  |Screen| Lock |  |      | Play |   K  |   M  | ,  < | . >  | /  ? |  - _   |
  * `----------------------+------+------+------+------+------|  |------+------+------+------+------+----------------------'
  *                        |      |      | Esc  | Space| Bscp |  | Enter|LShift| Tab  |      |      |
  *                        |      |      |      | Lower| Raise|  | Lower| Num  |      |      |      |
@@ -56,8 +56,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_COLEMAK] = LAYOUT(
       XXXXXXX,  CM_Q,          CM_W,          CM_F,          CM_P,          CM_G,                                               CM_J,         CM_L,          CM_U,          CM_Y,          CM_SCLN,       CM_PIPE,
       XXXXXXX,  LCTL_T(CM_A),  LALT_T(CM_R),  LSFT_T(CM_S),  LCMD_T(CM_T),  MEH_T(CM_D),                                        MEH_T(CM_H),  RCMD_T(CM_N),  RSFT_T(CM_E),  LALT_T(CM_I),  RCTL_T(CM_O),  CM_QUOT,
-      XXXXXXX,  CM_Z,          CM_X,          CM_C,          CM_V,          CM_B,         KC_LOCK, XXXXXXX, XXXXXXX, KC_SCREEN, CM_K,         CM_M,          CM_COMM,       CM_DOT,        CM_SLSH,       CM_MINS,
-                          XXXXXXX, XXXXXXX, KC_ESC, LT(_LOWER, KC_SPC), LT(_RAISE, KC_BSPC),                  LT(_LOWER, KC_ENT), LT_NUM_OSS, KC_TAB, XXXXXXX, XXXXXXX
+      XXXXXXX,  CM_Z,          CM_X,          CM_C,          CM_V,          CM_B,         KC_SCREEN, KC_LOCK, XXXXXXX, KC_MPLY, CM_K,         CM_M,          CM_COMM,       CM_DOT,        CM_SLSH,       CM_MINS,
+                                  XXXXXXX, XXXXXXX, KC_ESC, LT(_LOWER, KC_SPC), LT(_RAISE, KC_BSPC),                   LT(_LOWER, KC_ENT), LT_NUM_OSS, KC_TAB, XXXXXXX, XXXXXXX
     ),
 /*
  * Num Layer: Number and number-related symbols
