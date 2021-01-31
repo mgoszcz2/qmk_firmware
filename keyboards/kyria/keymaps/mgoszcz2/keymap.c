@@ -18,10 +18,11 @@
 
 // Needed since LT() does not support quantum keycodes.
 #define KC_OSM_LSFT KC_FN31
-#define LT_RAISE_OSS LT(_RAISE, KC_OSM_LSFT)
+#define LT_NUM_OSS LT(_NUM, KC_OSM_LSFT)
 
 enum layers {
-    _QWERTY = 0,
+    _COLEMAK,
+    _NUM,
     _LOWER,
     _RAISE,
     _ADJUST
@@ -30,7 +31,7 @@ enum layers {
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 /*
- * Base Layer: QWERTY
+ * Base Layer: Colemak
  *
  * Note we use LALT on the right half.
  *
@@ -42,15 +43,35 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |--------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+--------|
  * |        |   Z  |   X  |   C  |   V  |   B  |      |      |  |      |      |   K  |   M  | ,  < | . >  | /  ? |  - _   |
  * `----------------------+------+------+------+------+------|  |------+------+------+------+------+----------------------'
- *                        |      |      | Esc  | Space| Tab  |  | Enter|LShift| Bksp |      |      |
- *                        |      |      |      | Lower| Raise|  | Lower|Raise |      |      |      |
+ *                        |      |      | Esc  | Space| Bscp |  | Enter|LShift| Tab  |      |      |
+ *                        |      |      |      | Lower| Raise|  | Lower| Num  |      |      |      |
  *                        `----------------------------------'  `----------------------------------'
  */
-    [_QWERTY] = LAYOUT(
+    [_COLEMAK] = LAYOUT(
       XXXXXXX,  CM_Q,          CM_W,          CM_F,          CM_P,          CM_G,                                         CM_J,  CM_L,          CM_U,          CM_Y,          CM_SCLN,       CM_PIPE,
       XXXXXXX,  LCTL_T(CM_A),  LALT_T(CM_R),  LSFT_T(CM_S),  LCMD_T(CM_T),  CM_D,                                         CM_H,  RCMD_T(CM_N),  RSFT_T(CM_E),  LALT_T(CM_I),  RCTL_T(CM_O),  CM_QUOT,
       XXXXXXX,  CM_Z,          CM_X,          CM_C,          CM_V,          CM_B,  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    CM_K,  CM_M,          CM_COMM,       CM_DOT,        CM_SLSH,       CM_MINS,
-                           XXXXXXX, XXXXXXX, KC_ESC, LT(_LOWER, KC_SPC), LT(_RAISE, KC_TAB),                   LT(_LOWER, KC_ENT), LT_RAISE_OSS, KC_BSPC, XXXXXXX, XXXXXXX
+                          XXXXXXX, XXXXXXX, KC_ESC, LT(_LOWER, KC_SPC), LT(_RAISE, KC_BSPC),                  LT(_LOWER, KC_ENT), LT_NUM_OSS, KC_TAB, XXXXXXX, XXXXXXX
+    ),
+/*
+ * Num Layer: Number and number-related symbols
+ *
+ * ,-------------------------------------------.                              ,-------------------------------------------.
+ * |        |      |  7   |  8   |  9   |      |                              |      |      |      |      |      |        |
+ * |--------+------+------+------+------+------|                              |------+------+------+------+------+--------|
+ * |        |  .   |  4   |  5   |  6   |  _   |                              |      | Cmd  | Shift| Alt  | Ctrl |        |
+ * |--------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+--------|
+ * |        |  ,   |  1   |  2   |  3   |      |      |      |  |      |      |      |      |      |      |      |        |
+ * `----------------------+------+------+------+------+------|  |------+------+------+------+------+----------------------'
+ *                        |      |      |      |  0   | Bspc |  |      | XXXX |      |      |      |
+ *                        |      |      |      |      |      |  |      | XXXX |      |      |      |
+ *                        `----------------------------------'  `----------------------------------'
+ */
+    [_NUM] = LAYOUT(
+      _______, _______, CM_7, CM_8, CM_9, _______,                                     _______, _______, _______, _______, _______, _______,
+      _______, CM_DOT,  CM_4, CM_5, CM_6, CM_UNDS,                                     _______, KC_RCMD, KC_RSFT, KC_LALT, KC_RCTL, _______,
+      _______, CM_COMM, CM_1, CM_2, CM_3, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
+                        _______, _______, _______, CM_0,    KC_BSPC, _______, _______, _______, _______, _______
     ),
 /*
  * Lower Layer: Symbols
@@ -141,7 +162,7 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 
 bool process_record_user(uint16_t keycode, keyrecord_t* record) {
     switch (keycode) {
-        case LT_RAISE_OSS:
+        case LT_NUM_OSS:
             if (record->event.pressed && record->tap.count > 0) {
                 if (get_oneshot_mods() & MOD_LSFT) {
                     del_oneshot_mods(MOD_LSFT);
@@ -191,7 +212,7 @@ static void render_status(void) {
     // Host Keyboard Layer Status
     oled_write_P(PSTR("Layer: "), false);
     switch (get_highest_layer(layer_state)) {
-        case _QWERTY:
+        case _COLEMAK:
             oled_write_P(PSTR("Default\n"), false);
             break;
         case _LOWER:
