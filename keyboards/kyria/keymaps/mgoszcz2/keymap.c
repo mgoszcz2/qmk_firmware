@@ -22,6 +22,11 @@
 
 // Needed since LT() does not support quantum keycodes.
 #define KC_OSM_LSFT KC_FN31
+
+#define LT_NAV_SPC LT(_NAV, KC_SPC)
+#define LT_FN_BSPC LT(_FN, KC_BSPC)
+#define LT_SYM_ENT LT(_SYM, KC_ENT)
+
 #define LT_NUM_OSS LT(_NUM, KC_OSM_LSFT)
 
 enum layers {
@@ -52,10 +57,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  *                        `----------------------------------'  `----------------------------------'
  */
     [_COLEMAK] = LAYOUT(
-      XXXXXXX, CM_Q,         CM_W,         CM_F,         CM_P,         CM_G,                                                        CM_J,        CM_L,         CM_U,         CM_Y,         CM_SCLN,      XXXXXXX,
-      XXXXXXX, LCTL_T(CM_A), LALT_T(CM_R), LSFT_T(CM_S), LCMD_T(CM_T), MEH_T(CM_D),                                                 MEH_T(CM_H), RCMD_T(CM_N), RSFT_T(CM_E), LALT_T(CM_I), RCTL_T(CM_O), CM_QUOT,
-      XXXXXXX, CM_Z,         CM_X,         CM_C,         CM_V,         CM_B,        SCMD(CM_3), CCMD(CM_Q), CCMD(KC_SPC), KC_MPLY, CM_K,         CM_M,         CM_COMM,      CM_DOT,       CM_SLSH,      XXXXXXX,
-                                  XXXXXXX, XXXXXXX, KC_ESC, LT(_NAV, KC_SPC), LT(_FN, KC_BSPC),                           LT(_SYM, KC_ENT), LT_NUM_OSS, KC_TAB, XXXXXXX, XXXXXXX
+      XXXXXXX, CM_Q,         CM_W,         CM_F,         CM_P,         CM_G,                                                          CM_J,        CM_L,         CM_U,         CM_Y,         CM_SCLN,      XXXXXXX,
+      XXXXXXX, LCTL_T(CM_A), LALT_T(CM_R), LSFT_T(CM_S), LCMD_T(CM_T), MEH_T(CM_D),                                                   MEH_T(CM_H), RCMD_T(CM_N), RSFT_T(CM_E), LALT_T(CM_I), RCTL_T(CM_O), CM_QUOT,
+      XXXXXXX, CM_Z,         CM_X,         CM_C,         CM_V,         CM_B,        SCMD(CM_3), CCMD(CM_Q),  CCMD(KC_SPC), KC_MPLY,   CM_K,        CM_M,         CM_COMM,      CM_DOT,       CM_SLSH,      XXXXXXX,
+                                           XXXXXXX,      XXXXXXX,      KC_ESC,      LT_NAV_SPC,  LT_FN_BSPC, LT_SYM_ENT,  LT_NUM_OSS, KC_TAB,      XXXXXXX,      XXXXXXX
     ),
 /*
  * Num Layer: Number and number-related symbols
@@ -175,6 +180,20 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
             break;
     }
     return true;
+}
+
+bool get_tapping_force_hold(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+        case LT_NAV_SPC:
+        case LT_FN_BSPC:
+        case LT_SYM_ENT:
+        case LT_NUM_OSS:
+            // Repeat thumb keys.
+            return false;
+        default:
+            // Do not repeat home mods.
+            return true;
+    }
 }
 
 #ifdef OLED_DRIVER_ENABLE
