@@ -17,14 +17,12 @@
 #include "keymap_colemak.h"
 #include "sendstring_colemak.h"
 
+// Hold Left Command and Left Ctrl and press kc.
+#define CCMD(_kc) LCTL(LCMD(_kc))
+
 // Needed since LT() does not support quantum keycodes.
 #define KC_OSM_LSFT KC_FN31
 #define LT_NUM_OSS LT(_NUM, KC_OSM_LSFT)
-
-enum custom_keycodes {
-    KC_SCREEN = SAFE_RANGE,
-    KC_LOCK,
-};
 
 enum layers {
     _COLEMAK,
@@ -42,82 +40,82 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * Note we use LALT on the right half.
  *
  * ,-------------------------------------------.                              ,-------------------------------------------.
- * |        |   Q  |   W  |   F  |   P  |   G  |                              |   J  |   L  |   U  |   Y  | ;  : |  | \   |
+ * |        |   Q  |   W  |   F  |   P  |   G  |                              |   J  |   L  |   U  |   Y  | ;  : |        |
  * |--------+------+------+------+------+------|                              |------+------+------+------+------+--------|
  * |        |   A  |   R  |  S   |   T  |   D  |                              |   H  |   N  |   E  |   I  |   O  |  ' "   |
  * |        | Ctrl | Alt  | Shift| Cmd  | Meh  |                              | Meh  | Cmd  | Shift| Alt  | Ctrl |        |
  * |--------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+--------|
- * |        |   Z  |   X  |   C  |   V  |   B  |Screen| Lock |  |      | Play |   K  |   M  | ,  < | . >  | /  ? |  - _   |
+ * |        |   Z  |   X  |   C  |   V  |   B  |Screen| Lock |  | Emoji| Play |   K  |   M  | ,  < | . >  | /  ? |        |
  * `----------------------+------+------+------+------+------|  |------+------+------+------+------+----------------------'
  *                        |      |      | Esc  | Space| Bscp |  | Enter| Shift| Tab  |      |      |
  *                        |      |      |      | Nav  | Fn   |  | Sym  | Num  |      |      |      |
  *                        `----------------------------------'  `----------------------------------'
  */
     [_COLEMAK] = LAYOUT(
-      XXXXXXX,  CM_Q,          CM_W,          CM_F,          CM_P,          CM_G,                                               CM_J,         CM_L,          CM_U,          CM_Y,          CM_SCLN,       CM_PIPE,
-      XXXXXXX,  LCTL_T(CM_A),  LALT_T(CM_R),  LSFT_T(CM_S),  LCMD_T(CM_T),  MEH_T(CM_D),                                        MEH_T(CM_H),  RCMD_T(CM_N),  RSFT_T(CM_E),  LALT_T(CM_I),  RCTL_T(CM_O),  CM_QUOT,
-      XXXXXXX,  CM_Z,          CM_X,          CM_C,          CM_V,          CM_B,         KC_SCREEN, KC_LOCK, XXXXXXX, KC_MPLY, CM_K,         CM_M,          CM_COMM,       CM_DOT,        CM_SLSH,       CM_MINS,
-                                       XXXXXXX, XXXXXXX, KC_ESC, LT(_NAV, KC_SPC), LT(_FN, KC_BSPC),                   LT(_SYM, KC_ENT), LT_NUM_OSS, KC_TAB, XXXXXXX, XXXXXXX
+      XXXXXXX, CM_Q,         CM_W,         CM_F,         CM_P,         CM_G,                                                        CM_J,        CM_L,         CM_U,         CM_Y,         CM_SCLN,      XXXXXXX,
+      XXXXXXX, LCTL_T(CM_A), LALT_T(CM_R), LSFT_T(CM_S), LCMD_T(CM_T), MEH_T(CM_D),                                                 MEH_T(CM_H), RCMD_T(CM_N), RSFT_T(CM_E), LALT_T(CM_I), RCTL_T(CM_O), CM_QUOT,
+      XXXXXXX, CM_Z,         CM_X,         CM_C,         CM_V,         CM_B,        SCMD(CM_3), CCMD(CM_Q), CCMD(KC_SPC), KC_MPLY, CM_K,         CM_M,         CM_COMM,      CM_DOT,       CM_SLSH,      XXXXXXX,
+                                  XXXXXXX, XXXXXXX, KC_ESC, LT(_NAV, KC_SPC), LT(_FN, KC_BSPC),                           LT(_SYM, KC_ENT), LT_NUM_OSS, KC_TAB, XXXXXXX, XXXXXXX
     ),
 /*
  * Num Layer: Number and number-related symbols
  *
  * ,-------------------------------------------.                              ,-------------------------------------------.
- * |        |      |  7   |  8   |  9   |      |                              |      |      |      |      |      |        |
+ * |        |  `   |  7   |  8   |  9   |  *   |                              |      |      |      |      |      |        |
  * |--------+------+------+------+------+------|                              |------+------+------+------+------+--------|
- * |        |  .   |  4   |  5   |  6   |  _   |                              | Meh  | Cmd  | Shift| Alt  | Ctrl |        |
+ * |        |  %   |  4   |  5   |  6   |  _   |                              | Meh  | Cmd  | Shift| Alt  | Ctrl |        |
  * |--------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+--------|
- * |        |  ,   |  1   |  2   |  3   |      |      |      |  |      |      |      |      |      |      |      |        |
+ * |        |  \   |  1   |  2   |  3   |  +   |      |      |  |      |      |      |      |      |      |      |        |
  * `----------------------+------+------+------+------+------|  |------+------+------+------+------+----------------------'
- *                        |      |      |      |  0   | Bspc |  | Enter| XXXX |      |      |      |
+ *                        |      |      |      |  0   |  '   |  |      | XXXX |      |      |      |
  *                        |      |      |      |      |      |  |      | XXXX |      |      |      |
  *                        `----------------------------------'  `----------------------------------'
  */
     [_NUM] = LAYOUT(
-      _______, _______, CM_7, CM_8, CM_9, _______,                                     _______, _______, _______, _______, _______, _______,
-      _______, CM_DOT,  CM_4, CM_5, CM_6, CM_UNDS,                                     KC_MEH,  KC_RCMD, KC_RSFT, KC_LALT, KC_RCTL, _______,
-      _______, CM_COMM, CM_1, CM_2, CM_3, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
-                        _______, _______, _______, CM_0,    KC_BSPC, KC_ENT,  _______, _______, _______, _______
+      _______, CM_GRV,  CM_7, CM_8, CM_9, CM_ASTR,                                     _______, _______, _______, _______, _______, _______,
+      _______, CM_PERC, CM_4, CM_5, CM_6, CM_UNDS,                                     KC_MEH,  KC_RCMD, KC_RSFT, KC_LALT, KC_RCTL, _______,
+      _______, CM_BSLS, CM_1, CM_2, CM_3, CM_PLUS, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
+                        _______, _______, _______, CM_0,    CM_QUOT, _______, _______, _______, _______, _______
     ),
 /*
  * Nav Layer: Navigation and media
  *
  * ,-------------------------------------------.                              ,-------------------------------------------.
- * |        |      |      |      |      |      |                              | Mute | Prev | Play | Next |      |        |
+ * |        |      |      |      |      |      |                              | Mute |      |      |      |      |        |
  * |--------+------+------+------+------+------|                              |------+------+------+------+------+--------|
  * |        | Ctrl | Alt  | Shift| Cmd  | Meh  |                              | VolUp| Left | Up   | Down | Right|        |
  * |--------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+--------|
- * |        |      |      |      |      |      |      |      |  |      |      | VolDn|      |      |      |      |        |
+ * |        |      |      |      |      |      |      |      |  |      |      | VolDn| Prev | Play | Next |      |        |
  * `----------------------+------+------+------+------+------|  |------+------+------+------+------+----------------------'
  *                        |      |      |      | XXXX |      |  |      |      |      |      |      |
  *                        |      |      |      | XXXX |      |  |      |      |      |      |      |
  *                        `----------------------------------'  `----------------------------------'
  */
     [_NAV] = LAYOUT(
-      _______, _______, _______, _______, _______, _______,                                     KC_MUTE, KC_MPRV, KC_MPLY, KC_MNXT, _______, _______,
+      _______, _______, _______, _______, _______, _______,                                     KC_MUTE, _______, _______, _______, _______, _______,
       _______, KC_LCTL, KC_LALT, KC_LSFT, KC_LCMD, KC_MEH,                                      KC_VOLU, KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, _______,
-      _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, KC_VOLD, _______, _______, _______, _______, _______,
+      _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, KC_VOLD, KC_MPRV, KC_MPLY, KC_MNXT, _______, _______,
                                  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
     ),
 /*
  * Sym Layer: Symbols
  *
  * ,-------------------------------------------.                              ,-------------------------------------------.
- * |        |  !   |  @   |  {   |  }   |  |   |                              |      |      |      |      |      |  | \   |
+ * |        |  ^   |  $   |  [   |  ]   |  |   |                              |      |      |      |      |      |        |
  * |--------+------+------+------+------+------|                              |------+------+------+------+------+--------|
- * |        |  #   |  $   |  (   |  )   |  `   |                              |   +  |  -   |  /   |  *   |  %   |  ' "   |
+ * |        |  !   |  =   |  (   |  )   |  ~   |                              | Meh  | Cmd  | Shift| Alt  | Ctrl |        |
  * |--------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+--------|
- * |        |  %   |  ^   |  [   |  ]   |  ~   |      |      |  |      |      |   &  |  =   |  ,   |  .   |  / ? | - _    |
+ * |        |  &   |  @   |  {   |  }   |  #   |      |      |  |      |      |      |      |      |      |      |        |
  * `----------------------+------+------+------+------+------|  |------+------+------+------+------+----------------------'
- *                        |      |      |      |  ;   |  =   |  | XXXX |  ;   |      |      |      |
+ *                        |      |      |      |  -   |  "   |  | XXXX |      |      |      |      |
  *                        |      |      |      |      |      |  | XXXX |      |      |      |      |
  *                        `----------------------------------'  `----------------------------------'
  */
     [_SYM] = LAYOUT(
-      _______, KC_EXLM, KC_AT,   KC_LCBR, KC_RCBR, KC_PIPE,                                     _______, _______, _______, _______, _______, KC_BSLS,
-      _______, KC_HASH, KC_DLR,  KC_LPRN, KC_RPRN, KC_GRV,                                      KC_PLUS, KC_MINS, KC_SLSH, KC_ASTR, KC_PERC, KC_QUOT,
-      _______, KC_PERC, KC_CIRC, KC_LBRC, KC_RBRC, KC_TILD, _______, _______, _______, _______, KC_AMPR, KC_EQL,  KC_COMM, KC_DOT,  KC_SLSH, KC_MINS,
-                                 _______, _______, _______, KC_SCLN, KC_EQL,  KC_EQL,  KC_SCLN, _______, _______, _______
+      _______, CM_CIRC, CM_DLR, CM_LBRC, CM_RBRC, CM_PIPE,                                     _______, _______, _______, _______, _______, _______,
+      _______, CM_EXLM, CM_EQL, CM_LPRN, CM_RPRN, CM_TILD,                                     KC_MEH,  KC_RCMD, KC_RSFT, KC_LALT, KC_RCTL, _______,
+      _______, CM_AMPR, CM_AT,  CM_LCBR, CM_RCBR, CM_HASH, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
+                                _______, _______, _______, CM_MINS, CM_DQUO, _______, _______, _______, _______, _______
     ),
 /*
  * Fn Layer: Function keys, RGB
@@ -174,12 +172,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
                 }
                 return false;
             }
-            break;
-        case KC_SCREEN:
-            if (pressed) SEND_STRING(SS_LCMD(SS_LSFT("3")));
-            break;
-        case KC_LOCK:
-            if (pressed) SEND_STRING(SS_LCMD(SS_LCTL("q")));
             break;
     }
     return true;
