@@ -26,7 +26,6 @@
 #define LT_NAV_SPC LT(_NAV, KC_SPC)
 #define LT_FN_BSPC LT(_FN, KC_BSPC)
 #define LT_SYM_ENT LT(_SYM, KC_ENT)
-
 #define LT_NUM_OSS LT(_NUM, KC_OSM_LSFT)
 
 enum layers {
@@ -108,7 +107,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * ,-------------------------------------------.                              ,-------------------------------------------.
  * |        |      |      |      |      |      |                              | Mute |      |      |      |      |        |
  * |--------+------+------+------+------+------|                              |------+------+------+------+------+--------|
- * |        | Ctrl | Alt  | Shift| Cmd  | Meh  |                              | VolUp| Left | Up   | Down | Right|        |
+ * |        | Ctrl | Alt  | Shift| Cmd  | Meh  |                              | VolUp| Left | Down | Up   | Right|        |
  * |--------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+--------|
  * |        |      |      |      |      |      |      |      |  |      |      | VolDn| Prev | Play | Next |      |        |
  * `----------------------+------+------+------+------+------|  |------+------+------+------+------+----------------------'
@@ -125,22 +124,24 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 /*
  * Fn Layer: Function keys, RGB
  *
+ * Note we assume 'natural scrolling' here.
+ *
  * ,-------------------------------------------.                              ,-------------------------------------------.
- * |        | F1   |  F2  | F3   | F4   | F5   |                              | F6   | F7   |  F8  | F9   | F10  |        |
+ * |        | F1   |  F2  | F3   | F4   | F5   |                              |      |      |Bottom| Top  |      |        |
  * |--------+------+------+------+------+------|                              |------+------+------+------+------+--------|
- * |        | TOG  | SAI  | HUI  | VAI  | MOD  |                              |      |      |      | F11  | F12  |        |
+ * |        | TOG  | SAI  | HUI  | VAI  | MOD  |                              |      | MLeft| MDown| MUp  |MRight|        |
  * |--------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+--------|
- * |        |      | SAD  | HUD  | VAD  | RMOD |      |      |  |      |      |      |      |      |      |      |        |
+ * |        |      | SAD  | HUD  | VAD  | RMOD |      |      |  |      |      |      |WRight| WUp  | WDown| WLeft|        |
  * `----------------------+------+------+------+------+------|  |------+------+------+------+------+----------------------'
- *                        |      |      |      |      | XXXX |  |      |      |      |      |      |
+ *                        |      |      |      |      | XXXX |  |RClick|LClick|MClick|      |      |
  *                        |      |      |      |      | XXXX |  |      |      |      |      |      |
  *                        `----------------------------------'  `----------------------------------'
  */
     [_FN] = LAYOUT(
-      _______, KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,                                       KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  _______,
-      _______, RGB_TOG, RGB_SAI, RGB_HUI, RGB_VAI, RGB_MOD,                                     _______, _______, _______, KC_F11,  KC_F12,  _______,
-      _______, _______, RGB_SAD, RGB_HUD, RGB_VAD, RGB_RMOD,_______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
-                                 _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
+      _______, KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,                                       _______, _______, LCMD(KC_DOWN), LCMD(KC_UP), _______, _______,
+      _______, RGB_TOG, RGB_SAI, RGB_HUI, RGB_VAI, RGB_MOD,                                     _______, KC_MS_L, KC_MS_D,       KC_MS_U,     KC_MS_R, _______,
+      _______, _______, RGB_SAD, RGB_HUD, RGB_VAD, RGB_RMOD,_______, _______, _______, _______, _______, KC_WH_R, KC_WH_U,       KC_WH_D,     KC_WH_L, _______,
+                                 _______, _______, _______, _______, _______, KC_BTN2, KC_BTN1, KC_BTN3, _______, _______
     ),
 // /*
 //  * Layer template
@@ -167,9 +168,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 bool process_record_user(uint16_t keycode, keyrecord_t* record) {
     const bool pressed = record->event.pressed;
+    const uint8_t taps = record->tap.count;
     switch (keycode) {
         case LT_NUM_OSS:
-            if (pressed && record->tap.count > 0) {
+            if (pressed && taps > 0) {
                 if (get_oneshot_mods() & MOD_LSFT) {
                     del_oneshot_mods(MOD_LSFT);
                 } else {
