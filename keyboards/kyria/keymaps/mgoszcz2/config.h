@@ -21,13 +21,22 @@
 #endif
 
 #ifdef RGBLIGHT_ENABLE
-  #define RGBLIGHT_ANIMATIONS
-  #define RGBLIGHT_HUE_STEP 8
-  #define RGBLIGHT_SAT_STEP 8
-  #define RGBLIGHT_VAL_STEP 8
-  #define RGBLIGHT_LIMIT_VAL 150
+  // Enable only particual RGB animations.
+  #define RGBLIGHT_EFFECT_RAINBOW_MOOD
+  #define RGBLIGHT_EFFECT_RAINBOW_SWIRL
+  #define RGBLIGHT_EFFECT_STATIC_GRADIENT
+  // Limit max brightness to prevent brownouts.
+  #define RGBLIGHT_LIMIT_VAL 128
 #endif
 
+// Not sure why Kyria enables Mechanical Locking support.
+#undef LOCKING_SUPPORT_ENABLE
+#undef LOCKING_RESYNC_ENABLE
+
+// Free up ~512 bytes.
+#define LAYER_STATE_8BIT
+
+// Mod tap tweaks.
 #define IGNORE_MOD_TAP_INTERRUPT
 #define TAPPING_FORCE_HOLD_PER_KEY
 #define TAPPING_TERM 200
