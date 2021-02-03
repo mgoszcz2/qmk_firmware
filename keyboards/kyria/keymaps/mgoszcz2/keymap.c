@@ -23,10 +23,28 @@
 // Needed since LT() does not support quantum keycodes.
 #define KC_OSM_LSFT KC_FN31
 
+// Thumb keys.
 #define LT_NAV_SPC LT(_NAV, KC_SPC)
 #define LT_FN_BSPC LT(_FN, KC_BSPC)
 #define LT_SYM_ENT LT(_SYM, KC_ENT)
 #define LT_NUM_OSS LT(_NUM, KC_OSM_LSFT)
+
+// Left home row.
+#define HOME_CTL_A LCTL_T(CM_A)
+#define HOME_ALT_R LALT_T(CM_R)
+#define HOME_SFT_S LSFT_T(CM_S)
+#define HOME_CMD_T LCMD_T(CM_T)
+#define HOME_MEH_D MEH_T(CM_D)
+// Right home row.
+#define HOME_MEH_H MEH_T(CM_H)
+#define HOME_CMD_N RCMD_T(CM_N)
+#define HOME_SFT_E RSFT_T(CM_E)
+#define HOME_ALT_I LALT_T(CM_I)
+#define HOME_CTL_O RCTL_T(CM_O)
+
+
+// For the per-key tapping term.
+#define BASE_TAPPING_TERM 200
 
 enum layers {
     _COLEMAK,
@@ -56,10 +74,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  *                        `----------------------------------'  `----------------------------------'
  */
     [_COLEMAK] = LAYOUT(
-      XXXXXXX, CM_Q,         CM_W,         CM_F,         CM_P,         CM_G,                                                          CM_J,        CM_L,         CM_U,         CM_Y,         CM_SCLN,      XXXXXXX,
-      XXXXXXX, LCTL_T(CM_A), LALT_T(CM_R), LSFT_T(CM_S), LCMD_T(CM_T), MEH_T(CM_D),                                                   MEH_T(CM_H), RCMD_T(CM_N), RSFT_T(CM_E), LALT_T(CM_I), RCTL_T(CM_O), CM_QUOT,
-      XXXXXXX, CM_Z,         CM_X,         CM_C,         CM_V,         CM_B,        SCMD(CM_3), CCMD(CM_Q),  CCMD(KC_SPC), KC_MPLY,   CM_K,        CM_M,         CM_COMM,      CM_DOT,       CM_SLSH,      XXXXXXX,
-                                           XXXXXXX,      XXXXXXX,      KC_ESC,      LT_NAV_SPC,  LT_FN_BSPC, LT_SYM_ENT,  LT_NUM_OSS, KC_TAB,      XXXXXXX,      XXXXXXX
+      XXXXXXX, CM_Q,       CM_W,       CM_F,       CM_P,       CM_G,                                                         CM_J,       CM_L,       CM_U,       CM_Y,       CM_SCLN,      XXXXXXX,
+      XXXXXXX, HOME_CTL_A, HOME_ALT_R, HOME_SFT_S, HOME_CMD_T, HOME_MEH_D,                                                   HOME_MEH_H, HOME_CMD_N, HOME_SFT_E, HOME_ALT_I, RCTL_T(CM_O), CM_QUOT,
+      XXXXXXX, CM_Z,       CM_X,       CM_C,       CM_V,       CM_B,       SCMD(CM_3), CCMD(CM_Q), CCMD(KC_SPC), KC_MPLY,    CM_K,       CM_M,       CM_COMM,    CM_DOT,     CM_SLSH,      XXXXXXX,
+                                       XXXXXXX,    XXXXXXX,    KC_ESC,     LT_NAV_SPC, LT_FN_BSPC, LT_SYM_ENT,   LT_NUM_OSS, KC_TAB,     XXXXXXX,    XXXXXXX
     ),
 /*
  * Num Layer: Number and number-related symbols
@@ -193,8 +211,46 @@ bool get_tapping_force_hold(uint16_t keycode, keyrecord_t *record) {
             // Repeat thumb keys.
             return false;
         default:
-            // Do not repeat home mods.
+            // Do not repeat everything else.
             return true;
+    }
+}
+
+uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+        // Pinkie.
+        case HOME_CTL_O:
+        case HOME_CTL_A:
+            return BASE_TAPPING_TERM + 150;
+        // Ring.
+        case HOME_ALT_R:
+        case HOME_ALT_I:
+            // Need for 'ion' for example.
+            return BASE_TAPPING_TERM + 200;
+        // Middle.
+        case HOME_SFT_S:
+        case HOME_SFT_E:
+            return BASE_TAPPING_TERM - 20;
+        // Index.
+        case HOME_CMD_T:
+        case HOME_CMD_N:
+            return BASE_TAPPING_TERM - 20;
+        // Index outer.
+        case HOME_MEH_D:
+        case HOME_MEH_H:
+            return BASE_TAPPING_TERM - 20;
+        // Thumbs.
+        case LT_SYM_ENT:
+            // Prevent accidental Enter.
+            return BASE_TAPPING_TERM - 60;
+        case LT_FN_BSPC:
+            // Make the backspace more responsive.
+            return BASE_TAPPING_TERM - 30;
+        case LT_NAV_SPC:
+        case LT_NUM_OSS:
+            return BASE_TAPPING_TERM;
+        default:
+            return BASE_TAPPING_TERM;
     }
 }
 
