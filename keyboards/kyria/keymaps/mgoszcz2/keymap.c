@@ -23,11 +23,16 @@
 // Needed since LT() does not support quantum keycodes.
 #define KC_OSM_LSFT KC_FN31
 
+#define KC_TOP LCMD(KC_UP)
+#define KC_BOTM LCMD(KC_DOWN)
+
 // Thumb keys.
 #define LT_NAV_SPC LT(_NAV, KC_SPC)
-#define LT_FN_BSPC LT(_FN, KC_BSPC)
-#define LT_SYM_ENT LT(_SYM, KC_ENT)
-#define LT_NUM_OSS LT(_NUM, KC_OSM_LSFT)
+#define LT_FN_ENT LT(_FN, KC_ENT)
+#define LT_SYM_OSS LT(_SYM,KC_OSM_LSFT)
+#define LT_NUM_BS LT(_NUM, KC_BSPC)
+#define SH_ESC SH_T(KC_ESC)
+#define SH_TAB SH_T(KC_TAB)
 
 // Left home row.
 #define HOME_CTL_A LCTL_T(CM_A)
@@ -41,7 +46,6 @@
 #define HOME_SFT_E RSFT_T(CM_E)
 #define HOME_ALT_I LALT_T(CM_I)
 #define HOME_CTL_O RCTL_T(CM_O)
-
 
 // For the per-key tapping term.
 #define BASE_TAPPING_TERM 200
@@ -67,17 +71,17 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |        |   A  |   R  |  S   |   T  |   D  |                              |   H  |   N  |   E  |   I  |   O  |  ' "   |
  * |        | Ctrl | Alt  | Shift| Cmd  | Meh  |                              | Meh  | Cmd  | Shift| Alt  | Ctrl |        |
  * |--------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+--------|
- * |        |   Z  |   X  |   C  |   V  |   B  |Screen| Lock |  | Emoji| Play |   K  |   M  | ,  < | . >  | /  ? |        |
+ * |        |   Z  |   X  |   C  |   V  |   B  |Screen| Lock |  | Mute | Play |   K  |   M  | ,  < | . >  | /  ? |        |
  * `----------------------+------+------+------+------+------|  |------+------+------+------+------+----------------------'
- *                        |      |      | Esc  | Space| Bscp |  | Enter| Shift| Tab  |      |      |
- *                        |      |      |      | Nav  | Fn   |  | Sym  | Num  |      |      |      |
+ *                        |      |      | Esc  | Space| Enter|  | Shift| Bspc | Tab  |      |      |
+ *                        | Sym  | Num  | Swap | Nav  | Fn   |  | Sym  | Num  | Swap | Nav  | Fn   |
  *                        `----------------------------------'  `----------------------------------'
  */
     [_COLEMAK] = LAYOUT(
-      XXXXXXX, CM_Q,       CM_W,       CM_F,       CM_P,       CM_G,                                                         CM_J,       CM_L,       CM_U,       CM_Y,       CM_SCLN,      XXXXXXX,
-      XXXXXXX, HOME_CTL_A, HOME_ALT_R, HOME_SFT_S, HOME_CMD_T, HOME_MEH_D,                                                   HOME_MEH_H, HOME_CMD_N, HOME_SFT_E, HOME_ALT_I, RCTL_T(CM_O), CM_QUOT,
-      XXXXXXX, CM_Z,       CM_X,       CM_C,       CM_V,       CM_B,       SCMD(CM_3), CCMD(CM_Q), CCMD(KC_SPC), KC_MPLY,    CM_K,       CM_M,       CM_COMM,    CM_DOT,     CM_SLSH,      XXXXXXX,
-                                       XXXXXXX,    XXXXXXX,    KC_ESC,     LT_NAV_SPC, LT_FN_BSPC, LT_SYM_ENT,   LT_NUM_OSS, KC_TAB,     XXXXXXX,    XXXXXXX
+      XXXXXXX, CM_Q,       CM_W,       CM_F,       CM_P,       CM_G,                                                      CM_J,       CM_L,       CM_U,       CM_Y,       CM_SCLN,      XXXXXXX,
+      XXXXXXX, HOME_CTL_A, HOME_ALT_R, HOME_SFT_S, HOME_CMD_T, HOME_MEH_D,                                                HOME_MEH_H, HOME_CMD_N, HOME_SFT_E, HOME_ALT_I, RCTL_T(CM_O), CM_QUOT,
+      XXXXXXX, CM_Z,       CM_X,       CM_C,       CM_V,       CM_B,       SCMD(CM_3), CCMD(CM_Q), MEH(CM_M),  KC_MPLY,   CM_K,       CM_M,       CM_COMM,    CM_DOT,     CM_SLSH,      XXXXXXX,
+                                       MO(_SYM),   MO(_NUM),   SH_ESC,     LT_NAV_SPC, LT_FN_ENT,  LT_SYM_OSS, LT_NUM_BS, SH_TAB,     MO(_NAV),   MO(_FN)
     ),
 /*
  * Num Layer: Number and number-related symbols
@@ -94,9 +98,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  *                        `----------------------------------'  `----------------------------------'
  */
     [_NUM] = LAYOUT(
-      _______, CM_GRV,  CM_7, CM_8, CM_9, CM_ASTR,                                     _______, _______, _______, _______, _______, _______,
-      _______, CM_PERC, CM_4, CM_5, CM_6, CM_UNDS,                                     KC_MEH,  KC_RCMD, KC_RSFT, KC_LALT, KC_RCTL, _______,
-      _______, CM_BSLS, CM_1, CM_2, CM_3, CM_PLUS, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
+      _______, CM_GRV,  CM_7,    CM_8,    CM_9,    CM_ASTR,                                     _______, _______, _______, _______, _______, _______,
+      _______, CM_PERC, CM_4,    CM_5,    CM_6,    CM_UNDS,                                     KC_MEH,  KC_RCMD, KC_RSFT, KC_LALT, KC_RCTL, _______,
+      _______, CM_BSLS, CM_1,    CM_2,    CM_3,    CM_PLUS, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
                         _______, _______, _______, CM_0,    CM_QUOT, _______, _______, _______, _______, _______
     ),
 /*
@@ -156,9 +160,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  *                        `----------------------------------'  `----------------------------------'
  */
     [_FN] = LAYOUT(
-      _______, KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,                                       _______, _______, LCMD(KC_DOWN), LCMD(KC_UP), _______, _______,
-      _______, RGB_TOG, RGB_SAI, RGB_HUI, RGB_VAI, RGB_MOD,                                     _______, KC_MS_L, KC_MS_D,       KC_MS_U,     KC_MS_R, _______,
-      _______, _______, RGB_SAD, RGB_HUD, RGB_VAD, RGB_RMOD,_______, _______, _______, _______, _______, KC_WH_R, KC_WH_U,       KC_WH_D,     KC_WH_L, _______,
+      _______, KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,                                       _______, _______, KC_BOTM, KC_TOP,  _______, _______,
+      _______, RGB_TOG, RGB_SAI, RGB_HUI, RGB_VAI, RGB_MOD,                                     _______, KC_MS_L, KC_MS_D, KC_MS_U, KC_MS_R, _______,
+      _______, _______, RGB_SAD, RGB_HUD, RGB_VAD, RGB_RMOD,_______, _______, _______, _______, _______, KC_WH_R, KC_WH_U, KC_WH_D, KC_WH_L, _______,
                                  _______, _______, _______, _______, _______, KC_BTN2, KC_BTN1, KC_BTN3, _______, _______
     ),
 // /*
@@ -188,7 +192,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
     const bool pressed = record->event.pressed;
     const uint8_t taps = record->tap.count;
     switch (keycode) {
-        case LT_NUM_OSS:
+        case LT_SYM_OSS:
             if (pressed && taps > 0) {
                 if (get_oneshot_mods() & MOD_LSFT) {
                     del_oneshot_mods(MOD_LSFT);
@@ -205,9 +209,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
 bool get_tapping_force_hold(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
         case LT_NAV_SPC:
-        case LT_FN_BSPC:
-        case LT_SYM_ENT:
-        case LT_NUM_OSS:
+        case LT_FN_ENT:
+        case LT_SYM_OSS:
+        case LT_NUM_BS:
+        case SH_ESC:
+        case SH_TAB:
             // Repeat thumb keys.
             return false;
         default:
@@ -240,14 +246,14 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
         case HOME_MEH_H:
             return BASE_TAPPING_TERM - 20;
         // Thumbs.
-        case LT_SYM_ENT:
+        case LT_FN_ENT:
             // Prevent accidental Enter.
             return BASE_TAPPING_TERM - 60;
-        case LT_FN_BSPC:
-            // Make the backspace more responsive.
-            return BASE_TAPPING_TERM - 30;
         case LT_NAV_SPC:
-        case LT_NUM_OSS:
+        case LT_SYM_OSS:
+        case LT_NUM_BS:
+        case SH_ESC:
+        case SH_TAB:
             return BASE_TAPPING_TERM;
         default:
             return BASE_TAPPING_TERM;
