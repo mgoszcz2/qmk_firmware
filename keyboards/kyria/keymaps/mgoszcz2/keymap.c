@@ -75,7 +75,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |--------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+--------|
  * |        |   Z  |   X  |   C  |   V  |   B  |Screen| Lock |  | Mute | Play |   K  |   M  | ,  < | . >  | /  ? |        |
  * `----------------------+------+------+------+------+------|  |------+------+------+------+------+----------------------'
- *                        | Shift| Bspc | Esc  | Space| Enter|  | Tab  | Bspc | Shift| Space| Esc  |
+ *                        | Shift| Bspc | Esc  | Space| Tab  |  | Enter| Bspc | Shift| Space| Esc  |
  *                        | Sym  | Num  | Fn   | Nav  | Swap |  | Swap | Num  | Sym  | Nav  | Fn   |
  *                        `----------------------------------'  `----------------------------------'
  */
@@ -83,7 +83,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
       XXXXXXX, CM_Q,    CM_W,    CM_F,    CM_P,    CM_G,                                                CM_J,    CM_L,    CM_U,    CM_Y,    CM_SCLN, XXXXXXX,
       DEBUG,   H_CTL_A, H_ALT_R, H_SFT_S, H_CMD_T, H_MEH_D,                                             H_MEH_H, H_CMD_N, H_SFT_E, H_ALT_I, H_CTL_O, CM_QUOT,
       XXXXXXX, CM_Z,    CM_X,    CM_C,    CM_V,    CM_B,    SCMD(CM_3), CCMD(CM_Q), MEH(CM_M), KC_MPLY, CM_K,    CM_M,    CM_COMM, CM_DOT,  CM_SLSH, XXXXXXX,
-                                 LT_SYM_OSS,LT_NUM_BS,LT_FN_ESC,LT_NAV_SPC,SH_ENT,  SH_TAB,    LT_NUM_BS,LT_SYM_OSS,LT_NAV_SPC,LT_FN_ESC
+                                 LT_SYM_OSS,LT_NUM_BS,LT_FN_ESC,LT_NAV_SPC, SH_TAB, SH_ENT,    LT_NUM_BS,LT_SYM_OSS,LT_NAV_SPC,LT_FN_ESC
     ),
 /*
  * Num Layer: Number and number-related symbols
