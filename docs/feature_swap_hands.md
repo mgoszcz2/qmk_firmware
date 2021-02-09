@@ -29,3 +29,15 @@ Note that the array indices are reversed same as the matrix and the values are o
 |`SH_TG`    |Toggles swap on and off with every key press.                            |
 |`SH_TT`    |Toggles with a tap; momentary when held.                                 |
 |`SH_OS`    |One shot swap hands: toggles while pressed or until next key press.      |
+
+## Tapping Force Hold
+
+By default the `SH_T` keycode behaves as if [tapping force hold](tap_hold.md#tapping-force-hold) was enabled. This makes it easier to use the swap hands function repeatedly without accidently activating the tapping function of the key.
+
+You can disable this behaviour by adding the following to your `config.h`:
+
+```c
+#define SWAP_HANDS_NO_TAPPING_FORCE_HOLD
+```
+
+With `SWAP_HANDS_NO_FORCE_HOLD` enabled you can still customise the key's behaviour using `TAPPING_FORCE_HOLD` and `TAPPING_FORCE_HOLD_PER_KEY` as you would for any other tap-hold key.

@@ -180,7 +180,6 @@ void process_record_tap_hint(keyrecord_t *record) {
             switch (action.swap.code) {
                 case OP_SH_ONESHOT:
                     break;
-                case OP_SH_TAP_TOGGLE:
                 default:
                     swap_hands = !swap_hands;
                     swap_held  = true;
@@ -710,7 +709,10 @@ void process_action(keyrecord_t *record, action_t action) {
                         } else {
                             wait_ms(TAP_CODE_DELAY);
                             unregister_code(action.swap.code);
-                            *record = (keyrecord_t){};  // hack: reset tap mode
+#    ifndef SWAP_HANDS_NO_TAPPING_FORCE_HOLD
+                            // hack: Reset the tap mode, essentially enabling TAPPING_FORCE_HOLD for this key.
+                            *record = (keyrecord_t){};
+#    endif
                         }
                     } else {
                         if (swap_held && !event.pressed) {
